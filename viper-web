@@ -257,7 +257,7 @@ def landing(p=False):
     db = Database()
     # Pagination
     # 25 per page
-    value = 25
+    value = 1000
     offset = 0
     contents['count'] = db.get_sample_count()
     page = request.query.page

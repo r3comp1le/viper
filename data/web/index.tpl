@@ -132,59 +132,41 @@
         <h3 class="panel-title">Project <strong>{{p}}</strong> contains: <strong>{{count}}</strong> Files</h3>
     </div>
 
-        <table class="table table-striped table-bordered table-hover">
+        <!--<table class="table table-striped table-bordered table-hover">-->
+        <div id="filter-bar"> </div>
+        <table id='mytable' data-toggle="table" data-classes="table table-hover table-condensed" data-striped="true" data-show-columns="true" data-search="true" data-pagination="true" data-page-size="20">            
+            <thead>
             <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>SHA256</th>
-                <th>Tags</th>
+                <th data-field="id" data-sortable="true">#</th>
+                <th data-field="name" data-sortable="true">Name</th>
+                <th data-field="type" data-sortable="true">Type</th>
+                <th data-field="compiled" data-sortable="true">Compiled</th>
+                <th data-field="size" data-sortable="true">Size</th>
+                <th data-field="md5" data-sortable="true">MD5</th>
+                <th data-field="tags" data-sortable="true">Tags</th>
             </tr>
+            </thead>
+            <tbody>
             % for row in latest:
             <tr>
                 <td>{{row.id}}</td>
                 <td><a href="/file/{{p}}/{{row.sha256}}">{{row.name}}</a></td>
-                <td><span class="mono">{{row.sha256}}</span></td>
+                <td><span class="mono">{{row.type}}</span></td>
+                <td><span class="mono">{{row.compiled}}</span></td>
+                <td><span class="mono">{{row.size}}</span></td>
+                <td><span class="mono">{{row.md5}}</span></td>
                 <td>
                 % for tags in row.tag:
                 {{tags.tag}},
                 % end
                 </td>
             </tr>
-            % end      
+            % end   
+            </tbody>
         </table>
 
 </div>
 
-<%
-# number of pages
-num_pages = count / 25
-if num_pages % 25 > 0:
-    num_pages += 1
-end
-cur_page = int(act_page)
-%>
 
-% if num_pages > 0:
-    <!-- pagination -->
-    <div class="text-center">
-        <ul class="pagination">
-            
-          <li><a href="/project/{{p}}?page={{cur_page-1}}">&laquo;</a></li>
-          % for i in range(num_pages):
-          <li
-          % if act_page: 
-          % if i == cur_page: 
-          class="active" 
-          % end
-          % end
-          >
-          
-          <a href="/project/{{p}}?page={{i}}">{{i}}</a></li>
-          % end
-          <li><a href="/project/{{p}}?page={{cur_page+1}}">&raquo;</a></li>
-        </ul>
-    </div>
-
-    <script type="text/javascript" src="/static/js/pagination.js"></script>
 % end
 % include("footer.tpl")

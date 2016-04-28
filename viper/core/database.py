@@ -49,6 +49,7 @@ class Malware(Base):
     created_at = Column(DateTime(timezone=False), default=datetime.now(), nullable=False)
     parent_id = Column(Integer(), ForeignKey('malware.id'))
     parent = relationship('Malware', lazy='subquery', remote_side=[id])
+    compiled = Column(Text(), nullable=True)
     tag = relationship(
         'Tag',
         secondary=association_table,
@@ -98,7 +99,8 @@ class Malware(Base):
                  mime=None,
                  ssdeep=None,
                  name=None,
-                 parent=None):
+                 parent=None,
+                 compiled=None):
         self.md5 = md5
         self.sha1 = sha1
         self.crc32 = crc32
@@ -110,6 +112,7 @@ class Malware(Base):
         self.ssdeep = ssdeep
         self.name = name
         self.parent = parent
+        self.compiled = compiled
 
 class Tag(Base):
     __tablename__ = 'tag'
@@ -324,6 +327,7 @@ class Database:
                                         mime=obj.mime,
                                         ssdeep=obj.ssdeep,
                                         name=name,
+                                        compiled=obj.compiled,
                                         parent=parent_sha)
                 session.add(malware_entry)
                 session.commit()

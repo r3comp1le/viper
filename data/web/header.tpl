@@ -22,6 +22,7 @@ end
     <meta name="keywords" content="viper,malware,analysis">
     <link href="/static/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
 </head>
 <body>
 

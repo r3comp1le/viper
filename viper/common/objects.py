@@ -4,6 +4,7 @@
 import os
 import hashlib
 import binascii
+import datetime
 
 try:
     import pydeep
@@ -15,6 +16,13 @@ try:
     import magic
 except ImportError:
     pass
+    
+try:
+    import pefile
+    import peutils
+    HAVE_PEFILE = True
+except ImportError:
+    HAVE_PEFILE = False
 
 
 class Singleton(type):
@@ -76,6 +84,7 @@ class File(object):
         self.crc32 = ''
         self.ssdeep = ''
         self.tags = ''
+        self.compiled = ''
         self.parent = ''
         self.children = ''
 
@@ -86,6 +95,7 @@ class File(object):
             self.mime = self.get_mime()
             self.get_hashes()
             self.ssdeep = self.get_ssdeep()
+            self.compiled = self.get_compiled()
 
     @property
     def data(self):
@@ -134,6 +144,18 @@ class File(object):
         except Exception:
             return ''
 
+    def get_compiled(self):
+        def get_compiletime(pe):
+            return datetime.datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp)
+            
+        try:
+            cur_pe = pefile.PE(self.path)
+            cur_compile_time = get_compiletime(cur_pe)
+            return cur_compile_time
+            
+        except Exception:
+            return ''
+            
     def get_type(self):
         try:
             ms = magic.open(magic.MAGIC_NONE)
